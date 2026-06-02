@@ -27,7 +27,7 @@ export function ThemeScript() {
         __html: `
           try {
             const theme = localStorage.getItem('kiya-theme');
-            if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            if (theme === 'dark') {
               document.documentElement.classList.add('dark');
             }
           } catch(e) {}
