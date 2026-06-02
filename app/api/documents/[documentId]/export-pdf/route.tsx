@@ -117,21 +117,21 @@ export async function POST(
   }
 
   // Register custom fonts for PDF rendering
-Font.register({
-  family: 'Inter',
-  fonts: [
-    { src: '/Fonts/Inter-Regular.otf' },
-    { src: '/Fonts/Inter-Bold.otf', fontWeight: 700 },
-  ],
-});
-
-Font.register({
-  family: 'Playfair Display',
-  fonts: [
-    { src: '/Fonts/PlayfairDisplay-Regular.ttf' },
-    { src: '/Fonts/PlayfairDisplay-Italic.ttf', fontStyle: 'italic' },
-  ],
-});
+// Resolve Inter font file from the public folder
+const fontsDir = path.join(process.cwd(), 'public', 'Fonts');
+const interPath = path.join(fontsDir, 'Inter-Regular.otf');
+if (fs.existsSync(interPath)) {
+  Font.register({
+    family: 'Inter',
+    fonts: [
+      { src: interPath },
+      { src: path.join(fontsDir, 'Inter-Bold.otf'), fontWeight: 700 },
+    ],
+  });
+} else {
+  console.warn('[PDF Export] Inter font files not found – falling back to Times-Roman');
+}
+// No Playfair Display registration – headings will use default font if custom font missing
   // Keep original HTML styling (fonts are already registered)
   const sanitizedHtml = html;
 
