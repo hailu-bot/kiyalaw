@@ -6,6 +6,11 @@ import path from 'path';
 import { Document, Page, View, Text, Image, StyleSheet, renderToBuffer, Font } from '@react-pdf/renderer';
 import { Html } from 'react-pdf-html';
 
+// Define font file paths and determine font family to use
+const interRegularPath = path.resolve(process.cwd(), 'public', 'Fonts', 'Inter-Regular.otf');
+const interBoldPath = path.resolve(process.cwd(), 'public', 'Fonts', 'Inter-Bold.otf');
+const bodyFontFamily = (fs.existsSync(interRegularPath) && fs.existsSync(interBoldPath)) ? 'Inter' : 'Times-Roman';
+
 interface PageStampConfig {
   active: boolean;
   right: number;
@@ -19,7 +24,7 @@ const styles = StyleSheet.create({
     padding: MARGIN,
     paddingTop: 110,
     paddingBottom: 60,
-    fontFamily: 'Inter', // Use Inter for body text as per design system
+    fontFamily: bodyFontFamily, // Use Inter if available, otherwise Times-Roman
     fontSize: 11,
     lineHeight: 1.5,
     color: '#0A1128',
@@ -117,19 +122,17 @@ export async function POST(
   }
 
   // Register custom fonts for PDF rendering
-// Resolve Inter font file from the public folder
-const fontsDir = path.join(process.cwd(), 'public', 'Fonts');
-const interPath = path.join(fontsDir, 'Inter-Regular.otf');
-if (fs.existsSync(interPath)) {
+if (bodyFontFamily === 'Inter') {
   Font.register({
     family: 'Inter',
     fonts: [
-      { src: interPath },
-      { src: path.join(fontsDir, 'Inter-Bold.otf'), fontWeight: 700 },
+      { src: interRegularPath },
+      { src: interBoldPath, fontWeight: 700 },
     ],
   });
+  console.info('[PDF Export] Inter fonts registered from', interRegularPath);
 } else {
-  console.warn('[PDF Export] Inter font files not found – falling back to Times-Roman');
+  console.warn('[PDF Export] Inter font files not found – using Times-Roman');
 }
 // No Playfair Display registration – headings will use default font if custom font missing
   // Keep original HTML styling (fonts are already registered)
@@ -165,7 +168,9 @@ if (fs.existsSync(interPath)) {
           <Page key={i} size="LETTER" style={styles.page} wrap>
             <PdfHeader uri={headerUri} />
             <View style={{ flex: 1 }}>
-              <Html style={{ fontFamily: 'Inter' }}>{segment}</Html>
+                <Html style={{ fontFamily: bodyFontFamily }}>
+                  {segment}
+                </Html>
             </View>
             <PdfFooter pageNum={i + 1} totalPages={totalPages} refNum={refNum} />
             {showStamp && (
