@@ -188,9 +188,7 @@ if (bodyFontFamily === 'Inter') {
                 </Html>
             </View>
             <PdfFooter pageNum={i + 1} totalPages={totalPages} refNum={refNum} />
-            {showStamp && (
-              <PdfStamp uri={stampUri} right={stamp.right} bottom={stamp.bottom} />
-            )}
+            {stampUri && <PdfStamp uri={stampUri} right={stamp?.right ?? 30} bottom={stamp?.bottom ?? 30} />}
           </Page>
         );
       })}
