@@ -3,7 +3,7 @@ import { updateSession } from '@/lib/supabase/middleware';
 import React from 'react';
 import fs from 'fs';
 import path from 'path';
-import { Document, Page, View, Text, Image, StyleSheet, renderToBuffer } from '@react-pdf/renderer';
+import { Document, Page, View, Text, Image, StyleSheet, renderToBuffer, Font } from '@react-pdf/renderer';
 import { Html } from 'react-pdf-html';
 
 interface PageStampConfig {
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     padding: MARGIN,
     paddingTop: 110,
     paddingBottom: 60,
-    fontFamily: 'Times-Roman',
+    fontFamily: 'Inter', // Use Inter for body text as per design system
     fontSize: 11,
     lineHeight: 1.5,
     color: '#0A1128',
@@ -116,11 +116,24 @@ export async function POST(
     return NextResponse.json({ error: 'html field is required' }, { status: 400 });
   }
 
-  // Replace unregistered font families with the built-in Times-Roman
-  const sanitizedHtml = html.replace(
-    /font-family:\s*[^;]+;?/gi,
-    'font-family: Times-Roman;'
-  );
+  // Register custom fonts for PDF rendering
+Font.register({
+  family: 'Inter',
+  fonts: [
+    { src: '/Fonts/Inter-Regular.otf' },
+    { src: '/Fonts/Inter-Bold.otf', fontWeight: 700 },
+  ],
+});
+
+Font.register({
+  family: 'Playfair Display',
+  fonts: [
+    { src: '/Fonts/PlayfairDisplay-Regular.ttf' },
+    { src: '/Fonts/PlayfairDisplay-Italic.ttf', fontStyle: 'italic' },
+  ],
+});
+  // Keep original HTML styling (fonts are already registered)
+  const sanitizedHtml = html;
 
   const pageStamps: Record<number, PageStampConfig> = body.pageStamps ?? {};
 
@@ -152,7 +165,7 @@ export async function POST(
           <Page key={i} size="LETTER" style={styles.page} wrap>
             <PdfHeader uri={headerUri} />
             <View style={{ flex: 1 }}>
-              <Html style={{ fontFamily: 'Times-Roman' }}>{segment}</Html>
+              <Html style={{ fontFamily: 'Inter' }}>{segment}</Html>
             </View>
             <PdfFooter pageNum={i + 1} totalPages={totalPages} refNum={refNum} />
             {showStamp && (
