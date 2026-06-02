@@ -15,10 +15,24 @@ export async function signIn(formData: FormData) {
   }
 
   const supabase = await createAuthServerClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     return { success: false, message: error.message };
+  }
+
+  if (data.user) {
+    const existingUser = await prisma.user.findUnique({ where: { email: data.user.email! } });
+    if (!existingUser) {
+      await prisma.user.create({
+        data: {
+          id: data.user.id,
+          email: data.user.email!,
+          name: data.user.user_metadata?.full_name || undefined,
+        },
+      });
+      await seedDemoData(data.user.id);
+    }
   }
 
   revalidatePath('/', 'layout');
