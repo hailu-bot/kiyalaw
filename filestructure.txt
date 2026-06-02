@@ -1,0 +1,61 @@
+kiya-law/
+├── app/
+│   ├── layout.tsx                  ← Root layout (fonts, metadata)
+│   ├── globals.css                 ← Design tokens + base styles
+│   ├── page.tsx                    → /dashboard (Command Center)
+│   ├── billing/
+│   │   ├── page.tsx                → /billing (Invoice Approval Queue)
+│   │   └── history/page.tsx        → /billing/history
+│   ├── time/
+│   │   ├── page.tsx                → /time (AI Time Logger)
+│   │   └── [date]/page.tsx         → /time/2023-10-24 (Daily Breakdown)
+│   ├── clients/
+│   │   └── page.tsx                → /clients (Client Directory)
+│   ├── matters/
+│   │   ├── page.tsx                → /matters (Matter Management)
+│   │   └── [matterId]/page.tsx     → /matters/MAT-2023-089
+│   ├── documents/
+│   │   ├── page.tsx                → /documents (Doc Drafter)
+│   │   └── templates/page.tsx      → /documents/templates
+│   ├── automation/
+│   │   └── page.tsx                → /automation (Automation Hub)
+│   └── (auth)/
+│       └── login/page.tsx
+│
+├── components/
+│   ├── layout/
+│   │   ├── Sidebar.tsx             ← Shared sidebar (all pages)
+│   │   ├── TopNav.tsx              ← Shared top bar
+│   │   └── AppLayout.tsx           ← Wrapper: Sidebar + TopNav + children
+│   │
+│   ├── ui/                         ← Reusable atoms
+│   │   ├── StatCard.tsx
+│   │   ├── Badge.tsx
+│   │   ├── Avatar.tsx
+│   │   ├── Modal.tsx
+│   │   └── Button.tsx
+│   │
+│   ├── invoice/
+│   │   ├── InvoiceCard.tsx         ← Draft queue card
+│   │   ├── InvoiceApprovalQueue.tsx
+│   │   └── InvoiceDetail.tsx
+│   │
+│   ├── time/
+│   │   ├── TimeEntryRow.tsx
+│   │   ├── AITimeInput.tsx         ← Magic Wand input
+│   │   └── EditTimeEntryModal.tsx
+│   │
+│   ├── client/
+│   │   ├── ClientCard.tsx
+│   │   └── SelectClientModal.tsx
+│   │
+│   └── document/
+│       ├── DocumentDrafter.tsx
+│       ├── A4Preview.tsx           ← Live paper preview
+│       └── TemplateGallery.tsx
+│
+├── lib/
+│   ├── types.ts                    ← All TS interfaces
+│   └── constants.ts                ← Nav items, status colors
+│
+└── tailwind.config.ts

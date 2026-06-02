@@ -1,0 +1,54 @@
+.editorProseMirror :global(.ProseMirror) {
+  min-height: 800px;
+  outline: none;
+}
+
+.editorProseMirror :global(.ProseMirror p) {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+
+.editorProseMirror :global(.ProseMirror hr.page-break-line) {
+  border: 0;
+  height: 0;
+  border-top: 2px dashed var(--color-secondary, #D4AF37);
+  border-bottom: 2px dashed var(--color-secondary, #D4AF37);
+  margin: 3rem 0;
+  display: block;
+  text-align: center;
+  position: relative;
+}
+
+.editorProseMirror :global(.ProseMirror hr.page-break-line::after) {
+  content: "PAGE BREAK";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-surface, #ffffff);
+  padding: 0 10px;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--color-secondary, #D4AF37);
+  letter-spacing: 2px;
+}
+
+.editorProseMirror :global(.ProseMirror hr.page-break-line::before) {
+  display: none;
+}
+
+@media print {
+  .editorProseMirror :global(.ProseMirror hr.page-break-line) {
+    page-break-after: always;
+    break-after: page;
+    border: none;
+  }
+  .editorProseMirror :global(.ProseMirror hr.page-break-line::after) {
+    display: none;
+  }
+}
+
+.pageBreakMarker {
+  break-after: page;
+  page-break-after: always;
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <circle cx="80" cy="80" r="72" stroke="#0A1128" stroke-width="4" fill="none"/>
+  <circle cx="80" cy="80" r="64" stroke="#0A1128" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
+  <path d="M80 20L85 30H75L80 20Z" fill="#0A1128"/>
+  <path d="M80 140L85 130H75L80 140Z" fill="#0A1128"/>
+  <path d="M20 80L30 75V85L20 80Z" fill="#0A1128"/>
+  <path d="M140 80L130 75V85L140 80Z" fill="#0A1128"/>
+  <text x="80" y="76" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#0A1128">DRAFT</text>
+  <text x="80" y="96" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#46464d" letter-spacing="3">VERIFIED</text>
+  <line x1="48" y1="106" x2="112" y2="106" stroke="#0A1128" stroke-width="0.5"/>
+  <text x="80" y="118" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#0A1128" letter-spacing="2">KIYA LAW</text>
+</svg>

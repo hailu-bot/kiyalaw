@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiya Law — User Guide</title>
+<style>
+  :root {
+    --navy: #0A1128;
+    --gold: #D4AF37;
+    --gold-hover: #b8962e;
+    --text: #1a1a2e;
+    --text-muted: #46464d;
+    --bg: #ffffff;
+    --bg-off: #f8f9ff;
+    --border: #c6c6ce;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  }
+  .pdf-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 999;
+    background: var(--navy); color: var(--gold);
+    border: 2px solid var(--gold);
+    padding: 10px 20px; font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .pdf-btn:hover { background: var(--gold); color: var(--navy); }
+  .pdf-btn .icon { font-size: 18px; }
+  @media print {
+    @page { margin: 0.75in; size: A4; }
+    body { font-size: 10pt; }
+    .no-print { display: none !important; }
+    .page-break { page-break-before: always; }
+    .screenshot-placeholder { border: 1px dashed #999 !important; break-inside: avoid; }
+    a { color: var(--navy) !important; text-decoration: underline; }
+    table { break-inside: avoid; }
+    h2, h3, h4 { break-after: avoid; }
+    section { break-inside: avoid-page; }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 32px; }
+
+  .cover {
+    text-align: center;
+    padding: 100px 0 80px;
+    border-bottom: 3px solid var(--gold);
+    margin-bottom: 48px;
+  }
+  .cover h1 {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .cover .subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .cover .meta {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .cover .meta span { display: inline-block; margin: 0 12px; }
+  .cover .logo-placeholder {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--navy); color: var(--gold);
+    font-family: var(--font-heading); font-size: 28px; font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .toc { margin-bottom: 48px; }
+  .toc h2 {
+    font-family: var(--font-heading);
+    font-size: 22px; color: var(--navy);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .toc ol { columns: 2; column-gap: 40px; padding-left: 20px; }
+  .toc li { margin-bottom: 6px; font-size: 13.5px; }
+  .toc li a { color: var(--navy); text-decoration: none; }
+  .toc li a:hover { color: var(--gold); text-decoration: underline; }
+  .toc .toc-section { font-weight: 700; font-size: 14px; margin-top: 8px; break-inside: avoid; }
+
+  section { margin-bottom: 48px; }
+
+  h2.section-title {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    color: var(--navy);
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  h2.section-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--navy); color: var(--gold);
+    font-family: var(--font-body); font-size: 16px; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  h3 { font-size: 17px; color: var(--navy); margin: 20px 0 10px; }
+  h4 { font-size: 14px; color: var(--text-muted); margin: 14px 0 6px; font-weight: 600; }
+
+  p { font-size: 14px; margin-bottom: 10px; }
+  ul, ol { font-size: 14px; padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
+
+  strong { color: var(--navy); }
+  code {
+    background: var(--bg-off);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    font-size: 13px;
+    border-radius: 3px;
+  }
+
+  .note {
+    background: var(--bg-off);
+    border-left: 4px solid var(--gold);
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 13.5px;
+  }
+  .note strong { color: var(--navy); }
+
+  .tip {
+    background: #f0faf0;
+    border-left: 4px solid #2e7d32;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 13.5px;
+  }
+
+  .warn {
+    background: #fff8e1;
+    border-left: 4px solid #f57f17;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 13.5px;
+  }
+
+  .screenshot-placeholder {
+    border: 2px dashed var(--border);
+    background: var(--bg-off);
+    border-radius: 4px;
+    padding: 32px 20px;
+    text-align: center;
+    margin: 16px 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    break-inside: avoid;
+  }
+  .screenshot-placeholder .icon { font-size: 32px; margin-bottom: 8px; display: block; }
+  .screenshot-placeholder .label { font-weight: 600; color: var(--navy); font-size: 14px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13.5px; break-inside: avoid; }
+  th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  tr:nth-child(even) { background: var(--bg-off); }
+
+  .step { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+  .step-num {
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--gold); color: var(--navy);
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-body { flex: 1; }
+
+  .footer {
+    margin-top: 60px; padding-top: 20px;
+    border-top: 2px solid var(--border);
+    font-size: 12px; color: var(--text-muted); text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    .container { padding: 20px 16px; }
+    .cover { padding: 40px 0; }
+    .cover h1 { font-size: 28px; }
+    .toc ol { columns: 1; }
+    table { font-size: 12px; }
+    th, td { padding: 6px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="pdf-btn no-print" onclick="window.print()">
+  <span class="icon">&#128196;</span> Download PDF
+</button>
+
+<div class="container">
+
+<!-- Cover -->
+<div class="cover">
+  <div class="logo-placeholder">KL</div>
+  <h1>Kiya Law</h1>
+  <p class="subtitle">Billing &amp; Practice Management Platform &mdash; User Guide</p>
+  <p class="meta">
+    <span>Version 1.0</span>
+    <span>May 2026</span>
+  </p>
+</div>
+
+<!-- Table of Contents -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li class="toc-section"><a href="#s1">1. Getting Started</a></li>
+    <li><a href="#s1.1">1.1 Registration</a></li>
+    <li><a href="#s1.2">1.2 Login</a></li>
+    <li><a href="#s1.3">1.3 Your First Dashboard</a></li>
+    <li><a href="#s1.4">1.4 Guided Tours</a></li>
+
+    <li class="toc-section"><a href="#s2">2. Initial Setup</a></li>
+    <li><a href="#s2.1">2.1 Firm Profile</a></li>
+    <li><a href="#s2.2">2.2 Rate Cards</a></li>
+    <li><a href="#s2.3">2.3 Billing Cycle</a></li>
+
+    <li class="toc-section"><a href="#s3">3. Client Management</a></li>
+    <li><a href="#s3.1">3.1 Creating a Client (Wizard)</a></li>
+    <li><a href="#s3.2">3.2 Bulk Import via CSV</a></li>
+    <li><a href="#s3.3">3.3 Client Directory</a></li>
+
+    <li class="toc-section"><a href="#s4">4. Matter Management</a></li>
+    <li><a href="#s4.1">4.1 Creating a Matter</a></li>
+    <li><a href="#s4.2">4.2 Matter List &amp; Filters</a></li>
+
+    <li class="toc-section"><a href="#s5">5. Time Tracking</a></li>
+    <li><a href="#s5.1">5.1 Manual Full Entry</a></li>
+    <li><a href="#s5.2">5.2 Quick Entry</a></li>
+    <li><a href="#s5.3">5.3 AI Natural Language Logger</a></li>
+
+    <li class="toc-section"><a href="#s6">6. Expenses</a></li>
+
+    <li class="toc-section"><a href="#s7">7. Billing &amp; Invoicing</a></li>
+    <li><a href="#s7.1">7.1 Invoice Lifecycle</a></li>
+    <li><a href="#s7.2">7.2 Creating an Invoice</a></li>
+    <li><a href="#s7.3">7.3 Invoice Detail &amp; Actions</a></li>
+    <li><a href="#s7.4">7.4 Approval Queue</a></li>
+    <li><a href="#s7.5">7.5 Auto-Billing</a></li>
+
+    <li class="toc-section"><a href="#s8">8. AI Features</a></li>
+    <li><a href="#s8.1">8.1 AI Text Assistant</a></li>
+    <li><a href="#s8.2">8.2 AI Time Logger</a></li>
+    <li><a href="#s8.3">8.3 AI Insights (Dashboard)</a></li>
+    <li><a href="#s8.4">8.4 AI Agent Panel</a></li>
+
+    <li class="toc-section"><a href="#s9">9. Automation</a></li>
+    <li><a href="#s9.1">9.1 Automation Hub</a></li>
+    <li><a href="#s9.2">9.2 Configuring Auto-Billing</a></li>
+
+    <li class="toc-section"><a href="#s10">10. Settings Reference</a></li>
+
+    <li class="toc-section"><a href="#s11">11. Tips &amp; Best Practices</a></li>
+  </ol>
+</div>
+
+<!-- 1. Getting Started -->
+<section id="s1">
+  <h2 class="section-title"><span class="num">1</span> Getting Started</h2>
+
+  <h3 id="s1.1">1.1 Registration</h3>
+  <p>Navigate to <strong>/register</strong> to create your account. The page presents a split-screen layout with platform branding on the left and the registration form on the right.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body"><strong>Full Name</strong> &mdash; Enter your first and last name as it should appear on invoices and firm records.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body"><strong>Firm Email</strong> &mdash; Use your professional firm email address. This will be your login identifier.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body"><strong>Password</strong> &mdash; At least 6 characters. Use a combination of letters, numbers, and symbols.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body"><strong>Confirm Password</strong> &mdash; Re-enter your password. The system validates both entries match.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">Click <strong>Create Account</strong>. If email confirmation is enabled, you will be redirected to login with a banner: &ldquo;Account created. Check your email for a confirmation link.&rdquo;</div>
+  </div>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Registration Form</div>
+    <p>The registration page showing Full Name, Email, Password, and Confirm Password fields with a &ldquo;Create Account&rdquo; button. The left panel displays platform branding and benefits.</p>
+  </div>
+
+  <div class="note">
+    <strong>Note:</strong> After registration, sample demo data is automatically created &mdash; 3 clients, 6 matters, 4 time entries, 2 invoices, and 2 documents. This lets you explore the platform immediately with realistic data.
+  </div>
+
+  <h3 id="s1.2">1.2 Login</h3>
+  <p>Navigate to <strong>/login</strong>. The page displays a secure gateway interface.</p>
+  <ol>
+    <li>Enter your <strong>Office Email</strong> (the email you registered with).</li>
+    <li>Enter your <strong>Password</strong> (labeled &ldquo;Encrypted Key&rdquo; on the interface).</li>
+    <li>Click <strong>Sign In</strong>.</li>
+  </ol>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Login Page</div>
+    <p>Email and password fields with a &ldquo;SECURE GATEWAY&rdquo; header, &ldquo;Create Account&rdquo; and &ldquo;Forgot Key?&rdquo; links below. A SOC2 compliance badge and connection status footer are visible.</p>
+  </div>
+
+  <p>Below the login form you will find links to <strong>Create Account</strong> and <strong>Forgot Key?</strong> for password reset.</p>
+
+  <h3 id="s1.3">1.3 Your First Dashboard</h3>
+  <p>After logging in, you land on the <strong>Dashboard</strong> (<code>/</code>) &mdash; your central command center.</p>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Dashboard — First View</div>
+    <p>The Dashboard showing the metrics bar (Active Matters, Awaiting Approval, Outstanding balance, Today&rsquo;s Hours), Quick Action links, the Approval Queue, the Recent Activity feed, and the AI Insights panel on the right.</p>
+  </div>
+
+  <h4>Dashboard Sections</h4>
+  <table>
+    <tr><th>Section</th><th>Description</th></tr>
+    <tr><td>Quick Actions</td><td>Links to create a new matter, log time, create an invoice, or add a client.</td></tr>
+    <tr><td>Metrics Bar</td><td>Four key numbers: Active Matters, Pending Approvals, Outstanding Balance (&#36;), Today&rsquo;s Hours.</td></tr>
+    <tr><td>Approval Queue</td><td>Up to 5 draft/pending invoices with approve buttons and an &ldquo;Approve All&rdquo; option.</td></tr>
+    <tr><td>Pending Auto-Billing</td><td>Invoices awaiting the automated billing cycle. &ldquo;Run Now&rdquo; triggers it immediately.</td></tr>
+    <tr><td>Recent Activity</td><td>Last 8 actions across the platform with timestamps and links to related records.</td></tr>
+    <tr><td>AI Insights</td><td>Automated suggestions generated by the AI agent. Refresh to see new insights.</td></tr>
+  </table>
+
+  <h3 id="s1.4">1.4 Guided Tours</h3>
+  <p>When you visit a major page for the first time, a prompt appears: <strong>&ldquo;Explore this screen?&rdquo;</strong> Clicking it starts a step-by-step guided tour highlighting key features.</p>
+  <p>Tours are available for: Dashboard, Matters, Clients, Billing, Time Tracking, AI Time Logger, Documents, and Settings. You can replay any tour via the floating <strong>Help</strong> button (question mark icon) at the bottom of the page.</p>
+</section>
+
+<!-- 2. Initial Setup -->
+<section id="s2" class="page-break">
+  <h2 class="section-title"><span class="num">2</span> Initial Setup</h2>
+  <p>Before creating clients and matters, configure your firm profile by navigating to <strong>Settings</strong> (gear icon in the sidebar).</p>
+
+  <h3 id="s2.1">2.1 Firm Profile</h3>
+  <p>The <strong>Firm Profile</strong> tab controls how your firm appears on invoices and documents.</p>
+
+  <table>
+    <tr><th>Field</th><th>Description</th></tr>
+    <tr><td>Firm Name</td><td>Your law firm&rsquo;s legal name. Displayed on invoices and documents.</td></tr>
+    <tr><td>Default Billable Rate</td><td>Standard hourly rate (&#36;/hr) applied to new time entries and matters by default.</td></tr>
+    <tr><td>Timezone</td><td>Your operating timezone for date/time displays (EST, CST, MST, PST).</td></tr>
+    <tr><td>Date Format</td><td>Choose MM/DD/YYYY, DD/MM/YYYY, or YYYY-MM-DD.</td></tr>
+    <tr><td>Address</td><td>Firm address shown on invoices. Use the AI Text Assistant (sparkle button) to help format it.</td></tr>
+    <tr><td>Phone / Email / Website</td><td>Firm contact information for invoice headers.</td></tr>
+    <tr><td>Firm Logo</td><td>Upload your firm&rsquo;s logo. Appears at the top of invoices and PDF exports. Max 5 MB.</td></tr>
+    <tr><td>Billing Cycle (Days)</td><td>How often auto-invoices are generated (default 30).</td></tr>
+    <tr><td>Billing Lead Time (Days)</td><td>Days before cycle end to generate draft invoices (default 5).</td></tr>
+  </table>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Firm Profile Settings</div>
+    <p>The Firm Profile form with Firm Name, Default Billable Rate, Timezone selector, Date Format selector, Address textarea (with AI sparkle button), Phone, Email, Website, Logo upload area, and Billing Cycle fields.</p>
+  </div>
+
+  <div class="note">
+    <strong>Important:</strong> Set your <strong>Default Billable Rate</strong> and <strong>Firm Name</strong> before creating time entries or invoices. These values propagate to all new records automatically.
+  </div>
+
+  <h3 id="s2.2">2.2 Rate Cards</h3>
+  <p>Custom billing rates override the default rate for specific clients or matters. Navigate to <strong>Settings &rarr; Rate Cards</strong>.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">Click <strong>Add Rate Card</strong>.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">Enter the <strong>Rate</strong> (&#36;/hr), a descriptive <strong>Label</strong> (e.g., &ldquo;Corporate Preferred Rate&rdquo;), and optionally link it to a <strong>Client</strong> and/or <strong>Matter</strong>.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">Set <strong>Effective From</strong> and <strong>To</strong> dates for time-limited rates.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">Click <strong>Save</strong>.</div>
+  </div>
+
+  <div class="tip">
+    <strong>Rate resolution order:</strong> The system applies rates in this priority: Matter-specific rate &rarr; Client-specific rate &rarr; Firm default rate. The most specific match wins.
+  </div>
+
+  <h3 id="s2.3">2.3 Billing Cycle Configuration</h3>
+  <p>Configured in <strong>Settings &rarr; Firm Profile</strong>:</p>
+  <ul>
+    <li><strong>Billing Cycle Days</strong> &mdash; Set to 30 for monthly billing, 15 for bi-monthly, etc. The system checks for unbilled time entries at this interval.</li>
+    <li><strong>Billing Lead Time</strong> &mdash; Draft invoices are generated this many days before the cycle ends, giving you time to review before sending.</li>
+  </ul>
+  <p>You can also override the billing cycle per matter from the matter edit page for clients with custom billing arrangements.</p>
+</section>
+
+<!-- 3. Client Management -->
+<section id="s3">
+  <h2 class="section-title"><span class="num">3</span> Client Management</h2>
+
+  <h3 id="s3.1">3.1 Creating a Client (Wizard)</h3>
+  <p>Navigate to <strong>Clients</strong> in the sidebar and click the <strong>New Client</strong> button. This opens a 5-step onboarding wizard.</p>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Client Directory</div>
+    <p>The Client Directory grid with the &ldquo;New Client&rdquo; button at top-right and &ldquo;Import CSV&rdquo; button next to it. Search bar and sort controls are visible above the client cards.</p>
+  </div>
+
+  <h4>Step 1: Company Information</h4>
+  <ul>
+    <li><strong>Client Name</strong> (required) &mdash; Company or individual name.</li>
+    <li><strong>Industry</strong> &mdash; e.g., Technology, Healthcare, Financial Services.</li>
+    <li><strong>Status</strong> &mdash; Active (default), Inactive, or Prospect.</li>
+    <li><strong>Registration Number</strong>, <strong>Tax ID</strong>, <strong>VAT Number</strong> &mdash; Official business identifiers.</li>
+    <li><strong>Business Type</strong> &mdash; LLC, Corporation, Partnership, Sole Proprietorship, Non-Profit, Other.</li>
+    <li><strong>Date of Incorporation</strong> (YYYY-MM-DD), <strong>Jurisdiction</strong>, <strong>Website</strong>, <strong>Tags</strong> (comma-separated).</li>
+  </ul>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: New Client Wizard — Step 1 (Company Info)</div>
+    <p>Step 1 of the wizard with fields for Client Name, Industry, Status dropdown, Registration Number, Tax ID, VAT Number, Business Type dropdown, Date of Incorporation, Jurisdiction, Website, and Tags. A step indicator shows Step 1 of 5 highlighted.</p>
+  </div>
+
+  <h4>Step 2: Contact &amp; Address</h4>
+  <ul>
+    <li><strong>Contact Name</strong>, <strong>Contact Title</strong>, <strong>Email</strong>, <strong>Phone</strong>.</li>
+    <li><strong>Registered Address</strong> &mdash; Street, City, State, ZIP, Country.</li>
+    <li><strong>Billing Address</strong> &mdash; Same-as toggle to auto-copy from registered address.</li>
+    <li><strong>Internal Notes</strong> with AI Text Assistant support.</li>
+  </ul>
+
+  <h4>Step 3: Financial Details</h4>
+  <ul>
+    <li><strong>Annual Revenue Range</strong>, <strong>Employee Count</strong>.</li>
+    <li><strong>Billing Terms</strong> &mdash; Net 15, Net 30, Net 45, Net 60, Net 90, or Due on Receipt.</li>
+    <li><strong>Credit Limit</strong>, <strong>Referral Source</strong>.</li>
+    <li><strong>Internal Notes</strong> with AI Text Assistant.</li>
+  </ul>
+
+  <h4>Step 4: Matter Creation</h4>
+  <p>Create one or more matters during onboarding. At least one matter with a title and practice area is required.</p>
+  <ul>
+    <li><strong>Matter Title</strong> (required), <strong>Matter Code</strong> (auto-generated or custom).</li>
+    <li><strong>Practice Area</strong> (required) &mdash; Corporate, Litigation, IP, Real Estate.</li>
+    <li><strong>Lead Attorney</strong>, <strong>Description</strong> (with AI Text Assistant).</li>
+  </ul>
+
+  <h4>Step 5: Document Upload</h4>
+  <p>Upload client documents with labels (Certificate of Incorporation, Tax Document, Contract, etc.). This step is optional.</p>
+
+  <h3 id="s3.2">3.2 Bulk Import via CSV</h3>
+  <p>For adding multiple clients at once, use the CSV import feature from the Client Directory.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">Click <strong>Import CSV</strong> at the top of the Client Directory page.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">Download the <strong>CSV Template</strong> via the link in the modal. The template includes 31 columns matching the registration form.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">Fill in your client data in the CSV. Only <strong>Name</strong> is required. Refer to the modal&rsquo;s &ldquo;Accepted values reference&rdquo; for Status, Business Type, and Billing Terms options.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">Drag and drop your CSV file onto the upload area, or click to browse.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">Review the <strong>preview table</strong>. Invalid rows (missing Name) are flagged. Only valid rows will be imported.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body">Click <strong>Import N Clients</strong>. A results table shows which clients were created and any errors encountered.</div>
+  </div>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: CSV Import Modal</div>
+    <p>The modal showing a template download link, a drag-and-drop upload area, a preview table with row validation statuses (checkmark or warning icon), and the &ldquo;Import Clients&rdquo; button. The &ldquo;Accepted values reference&rdquo; accordion is expanded at the bottom.</p>
+  </div>
+
+  <div class="tip">
+    <strong>CSV format notes:</strong> Addresses use separate columns (Street, City, State, Zip, Country) for both registered and billing addresses. Tags are comma-separated. Dates use YYYY-MM-DD format. Enum fields must match the accepted values shown in the modal reference.
+  </div>
+
+  <h3 id="s3.3">3.3 Client Directory</h3>
+  <p>The Client Directory displays all your clients in a sortable, searchable grid (12 per page).</p>
+  <ul>
+    <li><strong>Search</strong> by name, contact name, or email.</li>
+    <li><strong>Sort</strong> by Name, Active Matters, or Created Date (ascending/descending).</li>
+    <li>Each card shows: client name, status badge, contact info, active matters count, balance, and action buttons (Matters, Invoice, Document).</li>
+    <li>Click a client card to view details, edit, manage matters, and upload documents.</li>
+  </ul>
+</section>
+
+<!-- 4. Matter Management -->
+<section id="s4" class="page-break">
+  <h2 class="section-title"><span class="num">4</span> Matter Management</h2>
+
+  <h3 id="s4.1">4.1 Creating a Matter</h3>
+  <p>Navigate to <strong>Matters &rarr; New Matter</strong> (<code>/matters/new</code>) or use the Quick Action on the Dashboard.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body"><strong>Matter Code</strong> &mdash; Auto-generated (e.g., MAT-2026-001). Can be customized.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body"><strong>Matter Name / Title</strong> (required) &mdash; A descriptive name for the legal matter.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body"><strong>Client</strong> &mdash; Click to open the <strong>Select Client</strong> modal. Search by name and select.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body"><strong>Practice Area</strong> &mdash; Choose from: Corporate, Litigation, Intellectual Property, Real Estate.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body"><strong>Case Type</strong> &mdash; e.g., M&amp;A, Securities Offering, Governance Audit, Joint Venture.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body"><strong>Lead Attorney</strong> &mdash; Type to search and assign counsel.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">7</div>
+    <div class="step-body"><strong>Matter Description</strong> &mdash; Use the AI Text Assistant (sparkle button) to help write a professional scope overview.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">8</div>
+    <div class="step-body">Click <strong>Create Matter</strong>. The matter appears in your matters list and on the selected client&rsquo;s profile.</div>
+  </div>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Create New Matter Form</div>
+    <p>The form with Matter Code, Matter Name, Client selector (opens modal), Practice Area dropdown, Case Type dropdown, Lead Attorney search field, and Description textarea with AI assistant. Side informational cards show Compliance Check, Billing Structure, and Auto-Provisioning status.</p>
+  </div>
+
+  <h3 id="s4.2">4.2 Matter List &amp; Filters</h3>
+  <p>The Matters page (<code>/matters</code>) provides a filterable, sortable list of all matters.</p>
+  <ul>
+    <li><strong>Filter</strong> by search query, practice area, and status (Active/Pending/Closed).</li>
+    <li><strong>Sort</strong> by Date, Title, or Status.</li>
+    <li>Each card displays: matter code, title, client name, practice area badge, status badge, activity and invoice counts, billable target progress bar, lead attorney initials.</li>
+    <li>Quick action links: <strong>Log Time</strong> (<code>/time/new?matterId=X</code>) and <strong>Invoice</strong> (<code>/billing/new?matterId=X</code>).</li>
+    <li>Click a card to view the full matter detail page with activities, invoices, and analytics.</li>
+  </ul>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Matters List</div>
+    <p>The Matters page with a filter sidebar on the left (search, practice area, status checkboxes) and a sortable card grid on the right. Each card shows the matter code, title, client, status badge, and quick action buttons.</p>
+  </div>
+</section>
+
+<!-- 5. Time Tracking -->
+<section id="s5">
+  <h2 class="section-title"><span class="num">5</span> Time Tracking</h2>
+  <p>Kiya Law offers three methods for logging time, each suited to different workflows.</p>
+
+  <h3 id="s5.1">5.1 Manual Full Entry</h3>
+  <p>Navigate to <strong>Time &rarr; Manual Entry</strong> (<code>/time/new</code>) for detailed time logging.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">Select <strong>Client</strong> from the dropdown. Matters filter automatically based on the selected client.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">Select the <strong>Matter</strong> this time entry belongs to.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">Choose a <strong>Task Category</strong>: Drafting &amp; Revision, Client Consultation, Legal Research, Court Appearance.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">Set the <strong>Date</strong> and <strong>Duration</strong> (hours and minutes).</div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body"><strong>Narrative Description</strong> (required) &mdash; Detailed account of legal services rendered. Use the AI Text Assistant to refine.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body"><strong>Internal Notes</strong> &mdash; Non-billable context for internal reference.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">7</div>
+    <div class="step-body">Toggle <strong>Billable</strong> on or off. Click <strong>Save Entry</strong>.</div>
+  </div>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Manual Time Entry Form</div>
+    <p>The full form showing Client and Matter dropdowns, Task Category selector, Date picker, Duration fields (hours and minutes), Narrative Description textarea (with AI sparkle), Internal Notes textarea (with AI sparkle), and Billable toggle. A back navigation link and &ldquo;Save Entry&rdquo; button are at the top and bottom.</p>
+  </div>
+
+  <h3 id="s5.2">5.2 Quick Entry</h3>
+  <p>From the main Time page (<code>/time</code>), the left panel offers a streamlined quick entry form using <code>useActionState</code> for fast submission.</p>
+  <ul>
+    <li>Select <strong>Client</strong> and <strong>Matter</strong> from grouped dropdowns.</li>
+    <li>Enter <strong>Date</strong>, <strong>Hours</strong>, and a <strong>Description</strong> (with AI Text Assistant).</li>
+    <li>Click <strong>Log Time Entry</strong>. The form resets for the next entry automatically on success.</li>
+  </ul>
+
+  <h3 id="s5.3">5.3 AI Natural Language Logger</h3>
+  <p>Navigate to <strong>AI Time Logger</strong> (<code>/time/ai-logger</code>) for the fastest time entry method.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">Type a plain English description of your work in the large text input. Example: <em>&ldquo;1.5h call with Oracle rep regarding compliance framework review&rdquo;</em> or <em>&ldquo;Drafted 10-page M&amp;A agreement for NovaTech.&rdquo;</em></div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">Click the <strong>Magic Wand</strong> (sparkle) button. The AI parses your text into a structured time entry: description, hours, matter, client name, and date.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">Review the parsed result in the review card. Verify the description, matched matter, hours, and date.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">Click <strong>Add to Log</strong> to save, or <strong>Discard</strong> to cancel.</div>
+  </div>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: AI Time Logger</div>
+    <p>A large natural language input field with a sparkle button. Below it, a parsed result card showing the extracted description, matched matter name, hours, date, and buttons for &ldquo;Add to Log&rdquo; and &ldquo;Discard.&rdquo; A &ldquo;Today&rsquo;s Log&rdquo; section at the bottom shows current entries and daily totals.</p>
+  </div>
+
+  <div class="tip">
+    <strong>Best results with AI Logger:</strong> Include the client or matter name, approximate hours, and a brief description of the work. Clear, specific language produces the best parses. Examples: <em>&ldquo;2h drafting shareholder agreement for Vertex Capital&rdquo;</em> or <em>&ldquo;0.5h reviewing court filing for HealthPlus litigation matter.&rdquo;</em>
+  </div>
+</section>
+
+<!-- 6. Expenses -->
+<section id="s6">
+  <h2 class="section-title"><span class="num">6</span> Expenses</h2>
+  <p>Track billable and non-billable expenses per matter from the Expenses page (<code>/expenses</code>).</p>
+
+  <h4>Recording an Expense</h4>
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body"><strong>Description</strong> (required) &mdash; What the expense is for. AI Text Assistant available.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body"><strong>Amount</strong> (required) &mdash; In dollars, supports decimal for cents (e.g., 350.00).</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body"><strong>Date</strong> &mdash; Defaults to today.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body"><strong>Category</strong> &mdash; Filing Fee, Service Fee, Travel, Copying, Expert Witness, Court Cost, Postage, or Other.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body"><strong>Matter</strong> (optional) &mdash; Link the expense to a specific matter.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body"><strong>Notes</strong> &mdash; Internal notes with AI Text Assistant.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">7</div>
+    <div class="step-body">Toggle <strong>Billable to client</strong>. Click <strong>Record Expense</strong>.</div>
+  </div>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Quick Expense Form</div>
+    <p>Left panel showing the expense form with Description (with AI), Amount, Date, Category dropdown, Matter dropdown, Notes (with AI), and Billable toggle. Right panel shows the &ldquo;All Expenses&rdquo; list with search, filters, and pagination.</p>
+  </div>
+</section>
+
+<!-- 7. Billing & Invoicing -->
+<section id="s7" class="page-break">
+  <h2 class="section-title"><span class="num">7</span> Billing &amp; Invoicing</h2>
+
+  <h3 id="s7.1">7.1 Invoice Lifecycle</h3>
+  <p>Every invoice progresses through four statuses:</p>
+
+  <table>
+    <tr><th>Status</th><th>Description</th><th>Actions</th></tr>
+    <tr><td><strong>Draft</strong></td><td>Created but not yet submitted. Editable.</td><td>Edit, Delete, Submit for Approval</td></tr>
+    <tr><td><strong>Pending Approval</strong></td><td>Awaiting partner review.</td><td>Approve, Reject, Edit</td></tr>
+    <tr><td><strong>Finalized</strong></td><td>Approved and issued. Ready to send to client.</td><td>Download PDF, Mark as Paid</td></tr>
+    <tr><td><strong>Paid</strong></td><td>Payment received. Invoice closed.</td><td>Download PDF (with stamp)</td></tr>
+  </table>
+
+  <h3 id="s7.2">7.2 Creating an Invoice</h3>
+  <p>Navigate to <strong>Billing &rarr; Create New Invoice</strong> or click the gold &ldquo;Create Invoice&rdquo; button in the sidebar.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body"><strong>Select Client</strong> &mdash; Opens the Select Client modal. The client&rsquo;s billing address, email, and phone auto-fill.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body"><strong>Select Matter</strong> &mdash; Filtered by the selected client. Choose the matter being billed.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body"><strong>Invoice Number</strong> &mdash; Auto-generated. Customizable.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body"><strong>Invoice Date</strong> and <strong>Due Date</strong> &mdash; Defaults to today and +30 days.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body"><strong>Line Items</strong> &mdash; Add rows with Description, Hours, and Rate. Total calculates automatically. Use + to add rows, trash icon to remove.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body"><strong>Notes &amp; Payment Terms</strong> &mdash; Optional section for custom terms, bank details, or instructions. AI Text Assistant available.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">7</div>
+    <div class="step-body">Click <strong>Save &amp; Issue Invoice</strong>. The invoice is created in Draft status and appears in the billing list.</div>
+  </div>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Create Invoice Form</div>
+    <p>Invoice layout with firm logo and address header, Bill To section (client name, address, email, phone), invoice number and dates, a line items table with Description/Hours/Rate/Total columns and add/remove buttons, subtotal calculation, and a Notes section with AI assistant.</p>
+  </div>
+
+  <h3 id="s7.3">7.3 Invoice Detail &amp; Actions</h3>
+  <p>Click any invoice in the billing list to view its detail page. Features and actions include:</p>
+  <ul>
+    <li><strong>Edit Bill-To</strong> &mdash; Pencil icon next to &ldquo;Bill To&rdquo; enables inline editing of the client&rsquo;s address, email, and phone. Changes save to the client record.</li>
+    <li><strong>Stamp Toggle</strong> &mdash; For Finalized and Paid invoices, toggle the &ldquo;PAID&rdquo; stamp overlay on/off. The stamp is draggable; position is preserved for PDF export.</li>
+    <li><strong>Download PDF</strong> &mdash; Generates a professional PDF matching the on-screen layout, including firm logo, stamp, and all details.</li>
+    <li><strong>Status Badge</strong> &mdash; Color-coded status indicator for Draft, Pending, Finalized, or Paid.</li>
+    <li><strong>Auto-Generated Badge</strong> &mdash; Appears for invoices created by the auto-billing system, with billing period dates.</li>
+  </ul>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Invoice Detail View</div>
+    <p>Full invoice preview with firm header (logo and contact details), Bill To section (address, email, phone), line items table with totals, Notes section, status badge, and a draggable PAID stamp overlay. Download PDF and navigation buttons are visible.</p>
+  </div>
+
+  <h3 id="s7.4">7.4 Approval Queue</h3>
+  <p>Pending invoices appear in two places:</p>
+  <ul>
+    <li><strong>Dashboard</strong> &mdash; The &ldquo;Approval Queue&rdquo; shows up to 5 draft/pending invoices with individual &ldquo;Approve&rdquo; buttons and an &ldquo;Approve All&rdquo; option.</li>
+    <li><strong>Billing &rarr; Approvals</strong> (<code>/billing/approvals</code>) &mdash; Full queue with all pending invoices for batch processing.</li>
+  </ul>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: Approval Queue</div>
+    <p>List of pending invoices showing client name, amount, date, and Approve/Reject buttons. An &ldquo;Approve All&rdquo; button is at the top of the queue.</p>
+  </div>
+
+  <h3 id="s7.5">7.5 Auto-Billing</h3>
+  <p>When configured in Settings, the auto-billing system automatically generates draft invoices from unbilled time entries.</p>
+  <ul>
+    <li><strong>Automatic trigger</strong> &mdash; Runs when you load the Dashboard if billing cycle conditions are met.</li>
+    <li><strong>Manual trigger</strong> &mdash; &ldquo;Run Now&rdquo; button in the &ldquo;Pending Auto-Billing&rdquo; section on the Dashboard.</li>
+    <li><strong>Scheduled trigger</strong> &mdash; A cron job runs weekly on Mondays at 6 AM.</li>
+    <li>Generated invoices appear as <strong>Draft</strong> with an &ldquo;Auto-Generated&rdquo; badge and billing period dates.</li>
+    <li>Review, edit, and approve auto-generated invoices like any other invoice.</li>
+    <li>Per-matter billing cycle overrides are respected if configured.</li>
+  </ul>
+</section>
+
+<!-- 8. AI Features -->
+<section id="s8">
+  <h2 class="section-title"><span class="num">8</span> AI Features</h2>
+
+  <h3 id="s8.1">8.1 AI Text Assistant</h3>
+  <p>The <strong>AI Text Assistant</strong> is available on textareas across the platform &mdash; notes, descriptions, invoice terms, firm address, and more. Look for the gold sparkle button at the bottom-right of supported textareas.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">Click the gold <strong>sparkle button</strong> at the bottom-right of any supported textarea. A popover opens.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">Choose a <strong>quick action</strong>: <em>Fix Grammar</em>, <em>Formal</em>, <em>Concise</em>, or <em>Expand</em>.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">Or type a <strong>custom instruction</strong>, e.g., <em>&ldquo;Rewrite this for a corporate client&rdquo;</em> or <em>&ldquo;Make this more detailed.&rdquo;</em> Press Enter or click <strong>Go</strong>.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">The AI streams the result in real time. Review the generated text.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">Click <strong>Apply to Text</strong> to replace the textarea content with the AI-generated version.</div>
+  </div>
+
+  <div class="screenshot-placeholder">
+    <span class="icon">&#128247;</span>
+    <div class="label">Screenshot: AI Text Assistant Popover</div>
+    <p>A popover anchored to a textarea, showing the current text preview, four quick action buttons (Fix Grammar, Formal, Concise, Expand), a custom prompt input field with a &ldquo;Go&rdquo; button, a streaming result area with animated cursor, and an &ldquo;Apply to Text&rdquo; button at the bottom.</p>
+  </div>
+
+  <div class="tip">
+    <strong>Pro tip:</strong> Quick action buttons handle the most common editing needs instantly. Use custom prompts for specific instructions like &ldquo;Add a payment deadline clause&rdquo; or &ldquo;Make this suitable for a court filing.&rdquo;
+  </div>
+
+  <h3 id="s8.2">8.2 AI Time Logger</h3>
+  <p>Described in <a href="#s5.3">Section 5.3</a>. The AI Time Logger at <code>/time/ai-logger</code> parses natural language descriptions into structured time entries automatically.</p>
+
+  <h3 id="s8.3">8.3 AI Insights (Dashboard)</h3>
+  <p>The AI Insights panel on the Dashboard provides automated analysis and suggestions:</p>
+  <ul>
+    <li>Call-to-action items with priority levels (High, Medium, Low).</li>
+    <li>Categorized as Billing, Compliance, Matters, Time Tracking, or General.</li>
+    <li>Click <strong>Refresh</strong> to generate new insights based on current firm data.</li>
+    <li>Insight cards have color-coded borders indicating priority.</li>
+  </ul>
+
+  <h3 id="s8.4">8.4 AI Agent Panel</h3>
+  <p>A floating sparkle button is always available at the bottom-right of the screen. Click it to open the AI Agent Panel &mdash; an on-demand assistant that can answer questions about your firm&rsquo;s data, suggest actions, and provide analysis.</p>
+
+  <div class="note">
+    <strong>Privacy:</strong> All AI features use Groq&rsquo;s Llama 3.1 8B model. No client data is used for model training. Responses are generated in real time and are not stored.
+  </div>
+</section>
+
+<!-- 9. Automation -->
+<section id="s9">
+  <h2 class="section-title"><span class="num">9</span> Automation</h2>
+
+  <h3 id="s9.1">9.1 Automation Hub</h3>
+  <p>The Automation Hub (<code>/automation</code>) gives a central view of your firm&rsquo;s automated workflows.</p>
+
+  <table>
+    <tr><th>System</th><th>Description</th></tr>
+    <tr><td>New Client Onboarding</td><td>Triggers a standard welcome packet when a new client is created.</td></tr>
+    <tr><td>Conflict Check Sweep</td><td>Runs daily at 2:00 AM EST to check for conflicts of interest.</td></tr>
+    <tr><td>Retainer Depletion Alert</td><td>Warns the partner when a retainer drops below 20%.</td></tr>
+    <tr><td>Invoice Automation</td><td>Auto-generates invoices based on configured billing cycles.</td></tr>
+  </table>
+
+  <p>The <strong>Workflow Builder</strong> preview shows automation sequences (e.g., when a matter is closed: generate final invoice &rarr; attach to email template &rarr; notify partner).</p>
+
+  <h3 id="s9.2">9.2 Configuring Auto-Billing</h3>
+  <p>Configure billing automation in two places:</p>
+  <ul>
+    <li><strong>Settings &rarr; Firm Profile</strong> &mdash; Set Billing Cycle Days and Billing Lead Time.</li>
+    <li><strong>Settings &rarr; Automation</strong> &mdash; Configure workflow triggers, policies, and notifications.</li>
+    <li><strong>Matter Edit</strong> &mdash; Override the billing cycle per matter for custom client arrangements.</li>
+  </ul>
+</section>
+
+<!-- 10. Settings -->
+<section id="s10">
+  <h2 class="section-title"><span class="num">10</span> Settings Reference</h2>
+  <p>Access all settings via the gear icon in the sidebar. Settings are organized into five tabs.</p>
+
+  <table>
+    <tr><th>Tab</th><th>What You Can Configure</th></tr>
+    <tr><td><strong>Firm Profile</strong></td><td>Firm name, logo, default rate, timezone, date format, address, contact info, billing cycle.</td></tr>
+    <tr><td><strong>Rate Cards</strong></td><td>Custom billing rates per client or matter with effective dates.</td></tr>
+    <tr><td><strong>Notifications</strong></td><td>Email notification preferences and billing alerts.</td></tr>
+    <tr><td><strong>Automation</strong></td><td>Workflow triggers, firm-wide policies, notification preferences, audit trail.</td></tr>
+    <tr><td><strong>User Account</strong></td><td>Your name, email, role, avatar. Account deletion in the Danger Zone section.</td></tr>
+  </table>
+
+  <div class="warn">
+    <strong>Account Deletion:</strong> The Danger Zone in User Account allows permanent account deletion. This removes all clients, matters, time entries, invoices, documents, and settings. Deletion requires typing &ldquo;DELETE&rdquo; to confirm. This action cannot be undone.
+  </div>
+</section>
+
+<!-- 11. Tips & Best Practices -->
+<section id="s11">
+  <h2 class="section-title"><span class="num">11</span> Tips &amp; Best Practices</h2>
+
+  <h3>Keyboard Shortcuts</h3>
+  <table>
+    <tr><th>Shortcut</th><th>Action</th></tr>
+    <tr><td><code>Cmd+K</code> / <code>Ctrl+K</code></td><td>Open Command Palette &mdash; search matters, clients, invoices, and documents globally.</td></tr>
+    <tr><td><code>Enter</code> (in AI prompt)</td><td>Submit the AI generation request.</td></tr>
+    <tr><td><code>Esc</code></td><td>Close any open modal, popover, or the AI Text Assistant panel.</td></tr>
+  </table>
+
+  <h3>Workflow Tips</h3>
+  <ul>
+    <li><strong>Set up your firm profile first.</strong> Configure your firm name, logo, default rate, and address before creating any data. These propagate to all invoices and documents.</li>
+    <li><strong>Use AI for descriptions.</strong> The AI Text Assistant is available on nearly every textarea. Use &ldquo;Formal&rdquo; for professional billing descriptions and &ldquo;Fix Grammar&rdquo; for quick proofreading.</li>
+    <li><strong>Log time daily.</strong> Use the AI Time Logger for the fastest entry. Daily logging prevents forgotten billable hours and makes auto-billing more accurate.</li>
+    <li><strong>Set up rate cards early.</strong> Configure client-specific rates before creating matters. The rate resolution cascade (matter &rarr; client &rarr; default) ensures the right rate is always applied.</li>
+    <li><strong>Configure billing cycles.</strong> Set your billing cycle days and lead time in Firm Profile. Auto-billing will generate draft invoices automatically, saving hours of manual work each month.</li>
+    <li><strong>Use guided tours.</strong> First time on a page? Click &ldquo;Explore this screen?&rdquo; for a walkthrough. Replay tours anytime from the Help button.</li>
+    <li><strong>Import clients in bulk.</strong> When migrating from another system, download the CSV template, map your data, and import hundreds of clients at once.</li>
+  </ul>
+
+  <h3>Getting Help</h3>
+  <ul>
+    <li><strong>Help Center</strong> (<code>/help</code>) &mdash; Links to documentation, support, live chat, and FAQ.</li>
+    <li><strong>Guided Tours</strong> &mdash; Replay any tour from the floating Help button.</li>
+    <li><strong>Command Palette</strong> (<code>Cmd+K</code>) &mdash; Quickly navigate to any record or page.</li>
+  </ul>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <p><strong>Kiya Law</strong> &mdash; Billing &amp; Practice Management Platform</p>
+  <p>&copy; 2026 Kiya Law Systems. All rights reserved.</p>
+  <p style="margin-top:4px; font-size:11px;">Document version 1.0 &mdash; Generated May 2026</p>
+</div>
+
+</div>
+</body>
+</html>

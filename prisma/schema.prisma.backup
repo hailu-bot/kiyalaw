@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+
+// ... your models below stay the same
+
+
+
+
+enum MatterStatus {
+  Active
+  Pending
+  Closed
+}
+
+enum ActivityType {
+  time
+  document
+  communication
+}
+
+enum InvoiceStatus {
+  Draft
+  PendingApproval
+  Approved
+  Finalized
+  Paid
+}
+
+model Client {
+  id        String    @id @default(cuid())
+  name      String
+  industry  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  matters   Matter[]
+  invoices  Invoice[] // Opposite relation field for Invoice.client
+}
+
+model Matter {
+  id             String      @id @default(cuid())
+  matterIdString String      @unique
+  title          String
+  description    String?
+  practiceArea   String
+  caseType       String
+  status         String      @default("OPEN")
+  leadAttorney   String
+  clientId       String
+  client         Client      @relation(fields: [clientId], references: [id])
+  timeEntries    TimeEntry[] // Opposite relation field for TimeEntry.matter
+  invoices       Invoice[]   // Opposite relation field for Invoice.matter
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model TimeEntry {
+  id           String   @id @default(cuid())
+  matterId     String
+  matter       Matter   @relation(fields: [matterId], references: [id], onDelete: Cascade)
+  category     String
+  date         DateTime
+  hours        Int      @default(0)
+  minutes      Int      @default(0)
+  description  String   @db.Text
+  isProBono    Boolean  @default(false)
+  isBillable   Boolean  @default(true)
+  internalNote String?  @db.Text
+  createdAt    DateTime @default(now())
+}
+
+model Invoice {
+  id            String     @id @default(cuid())
+  invoiceNumber String     @unique
+  date          DateTime
+  dueDate       DateTime
+  status        String     @default("DRAFT")
+  notes         String?    @db.Text
+  subtotal      Float
+  tax           Float      @default(0.0)
+  total         Float
+  clientId      String
+  client        Client     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  matterId      String
+  matter        Matter     @relation(fields: [matterId], references: [id], onDelete: Cascade)
+  lineItems     LineItem[] // Opposite relation field for LineItem.invoice
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model LineItem {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  hours       Float
+  rate        Float
+  total       Float
+  createdAt   DateTime @default(now())
+}

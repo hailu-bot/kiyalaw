@@ -1,0 +1,198 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@config "../tailwind.config.ts";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-surface: #f9f9ff;
+  --color-surface-dim: #cfdaf1;
+  --color-surface-bright: #f9f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f0f3ff;
+  --color-surface-container: #e7eeff;
+  --color-surface-container-high: #dee8ff;
+  --color-surface-container-highest: #d8e3fa;
+  --color-surface-variant: #d8e3fa;
+  --color-on-surface: #111c2c;
+  --color-on-surface-variant: #46464d;
+  --color-outline: #76767d;
+  --color-outline-variant: #c7c6cd;
+  --color-background: #f9f9ff;
+  --color-on-background: #111c2c;
+}
+
+.dark {
+  --color-surface: #1e293b;
+  --color-surface-dim: #0f172a;
+  --color-surface-bright: #1e293b;
+  --color-surface-container-lowest: #0f172a;
+  --color-surface-container-low: #1e293b;
+  --color-surface-container: #1e293b;
+  --color-surface-container-high: #263142;
+  --color-surface-container-highest: #334155;
+  --color-surface-variant: #334155;
+  --color-on-surface: #e2e8f0;
+  --color-on-surface-variant: #94a3b8;
+  --color-outline: #64748b;
+  --color-outline-variant: #475569;
+  --color-background: #0f172a;
+  --color-on-background: #e2e8f0;
+}
+
+/* Dark mode base */
+html.dark body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scrollbar for webkit */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c7c6cd;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #76767d;
+}
+
+/* Canvas shadow */
+.canvas-shadow {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 0 1px rgba(0,0,0,0.1);
+}
+
+/* AI Glow */
+.ai-glow {
+  box-shadow: 0 0 15px rgba(252, 211, 83, 0.4);
+}
+
+/* Legal header line */
+.legal-header-line {
+  height: 2px;
+  background: linear-gradient(90deg, #745b00 30%, #151b2f 30%);
+}
+
+/* Sidebar active indicator */
+.sidebar-active-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #fcd353;
+}
+
+/* Material Symbols inline */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+
+/* ========================================================
+   A4 PAGE PAGINATION SYSTEM
+   ======================================================== */
+
+/* Page gap separator — rendered between A4 pages */
+.page-gap-separator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0px;
+  border-top: 1px dashed #D4AF37;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.6;
+}
+
+/* Page number label inside the gap */
+.page-gap-label {
+  position: absolute;
+  right: -60px; /* Float outside the paper */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #D4AF37;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Floating page indicator pill */
+.page-indicator-pill {
+  position: sticky;
+  bottom: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 auto;
+  width: fit-content;
+  padding: 6px 18px;
+  background: rgba(21, 27, 47, 0.88);
+  backdrop-filter: blur(8px);
+  color: #e5e7eb;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.page-indicator-pill .page-current {
+  color: #D4AF37;
+  font-weight: 800;
+}
+
+/* Collapsed panel re-open button */
+.panel-reopen-float {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 30;
+  padding: 10px 6px;
+  background: linear-gradient(135deg, #151b2f 0%, #1e2642 100%);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  color: #D4AF37;
+  cursor: pointer;
+  box-shadow: -2px 2px 12px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s ease;
+}
+
+.panel-reopen-float:hover {
+  background: linear-gradient(135deg, #1e2642 0%, #283050 100%);
+  padding-left: 10px;
+  box-shadow: -4px 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation for page indicator fade */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease forwards;
+}
