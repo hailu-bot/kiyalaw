@@ -131,12 +131,27 @@ if (bodyFontFamily === 'Inter') {
     ],
   });
   console.info('[PDF Export] Inter fonts registered from', interRegularPath);
+  // Register Times New Roman if its font file is present (fallback for legacy docs)
+  const timesFontPath = path.resolve(process.cwd(), 'public', 'Fonts', 'times.ttf');
+  if (fs.existsSync(timesFontPath)) {
+    Font.register({
+      family: 'Times New Roman',
+      src: timesFontPath,
+    });
+    console.info('[PDF Export] Times New Roman font registered from', timesFontPath);
+  } else {
+    console.warn('[PDF Export] Times New Roman font file not found – using built-in Times-Roman');
+  }
 } else {
   console.warn('[PDF Export] Inter font files not found – using Times-Roman');
 }
 // No Playfair Display registration – headings will use default font if custom font missing
   // Keep original HTML styling (fonts are already registered)
-  const sanitizedHtml = html;
+  let sanitizedHtml = html;
+  // Replace any font-family declarations with the selected body font to avoid unregistered fonts
+  sanitizedHtml = sanitizedHtml.replace(/font-family\s*:\s*[^;]+;/gi, `font-family: ${bodyFontFamily};`);
+  // Replace any occurrence of Times New Roman with built‑in Times-Roman as a fallback (in case of inline usages)
+  sanitizedHtml = sanitizedHtml.replace(/Times New Roman/gi, 'Times-Roman');
 
   const pageStamps: Record<number, PageStampConfig> = body.pageStamps ?? {};
 
